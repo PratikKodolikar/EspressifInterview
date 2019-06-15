@@ -1,0 +1,5 @@
+For Project_2.cpp
+  We have also done:
+    -To search with O(1) complexity, we have used hashing with files.
+    -Validations for Adhaar ID i.e. No Duplication and 12 Digit compulsory.
+    -Includes code for mobile number allocation.
