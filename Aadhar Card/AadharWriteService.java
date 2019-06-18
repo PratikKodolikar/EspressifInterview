@@ -1,4 +1,4 @@
-package com.brogrammers.java;
+package fileManagement;
 
 import java.io.IOException;
 import java.io.EOFException;
@@ -139,7 +139,7 @@ public class AadharWriteService implements ActionListener{
 					return;
 				}
 				
-				AadharRecord record = new AadharRecord(id, textFields[1].getText(), textFields[2].getText(), textFields[3].getText());
+				AadharRecord record = new AadharRecord(id, textFields[0].getText(), textFields[1].getText(), textFields[2].getText());
 		
 				file.insertRecord(record);
 		
