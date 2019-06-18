@@ -1,4 +1,4 @@
-package com.brogrammers.java;
+package fileManagement;
 
 import java.io.*;
 import java.util.*;
@@ -26,8 +26,10 @@ class AadharFile extends RandomAccessFile {
 		System.out.println("mRecordSize = " + mRecordSize);
 
 		//create main file with 101 records
+		
 		seek(mRecordSize * 101);
 		writeInt(0);
+		
 		
 		//create index file for last name
 		this.mLastNameIndexFile = new IndexFile("LastNameIndex.dat");
@@ -44,8 +46,9 @@ class AadharFile extends RandomAccessFile {
 		
 		seek(mRecordSize * position);
 	
-		if(readInt() <= 0) {			//if hashed position is empty
+		if(readInt() <= 0) {	//if hashed position is empty
 			seek(mRecordSize * position);
+			System.out.println("HELLO");
 			
 			writeUTF(record.toString());
 			writeInt(-1);
@@ -153,14 +156,16 @@ class AadharFile extends RandomAccessFile {
 			position = prevPosition;
 		}
 		
+		test();
+		
 		System.out.println("Inserted " + record + " at " + position);
         
-		//insert the index in lasst and middle name index files respectively
+		//insert the index in last and middle name index files respectively
 		mLastNameIndexFile.insertIndex(record.getLastName(), position + 1, this ,1);
 		
 		mMiddleNameIndexFile.insertIndex(record.getMiddleName(), position + 1, this ,2);
 		
-		   test();
+		testIndex(1);
 		
 	}
 	
@@ -181,21 +186,23 @@ class AadharFile extends RandomAccessFile {
 	public final AadharRecord readRecord (long id) throws IOException {
 		
 		int position = Hashing.getPosition(id);
-		   System.out.println("position = " + position);
+		System.out.println("position = " + position);
 		
-		   test();
+		  // test();
 		   
-		while(position != -1 && read() >= 0)	{	
+		while(position != -1)	{	
 			seek(position * mRecordSize);
 			AadharRecord rec = new AadharRecord(readUTF());
 			if(rec.getAadharId() == id)
 				return rec;
 			seek(position * mRecordSize);
+			readUTF();
 			position = readInt();
+			System.out.println("Pos = = " + position);
 			
 		}	
-		
-		return new AadharRecord(0, "N/A", "N/A", "N/A");
+		System.out.println("HELLO");
+		return new AadharRecord(0L, "N/A", "N/A", "N/A");
 	}
 
 	public final String getFileName () {
@@ -239,8 +246,11 @@ class AadharFile extends RandomAccessFile {
 	public void test () throws IOException {
 		
 		seek(0);
+		System.out.println("Aadhar File\n");
 		for(int i=0; i<101; i++)
+		{	
 			System.out.println(i + " : " + readUTF() + " <> " + readInt());
+		}
 		
 	}
 
