@@ -38,13 +38,14 @@ public class PS2 {
                     break;
                 case 3:
                     System.out.println("Enter the name to search");
-                    p.getname();
-                    p.Search("NULL");
+                    String name;
+                    name = s.next();
+                    p.Search("NULL",name);
                     break;
                 case 4:
                     System.out.println("Enter the aadhar id to search");
                     id = s.next();
-                    p.Search(id);
+                    p.Search(id,null);
                     break;
                 case 5:
                     System.out.println("Enter the id to update");
@@ -213,7 +214,7 @@ class functions {
         }
     }
 
-    public void Search(String id) { // to search and display the record using aadhar id or name
+    public void Search(String id, String name) { // to search and display the record using aadhar id or name
         if (id.compareTo("NULL") != 0 && check_id(id)==1) {
             String sql = " SELECT * FROM aadhar_card WHERE aadhar_id = " + id;
 
@@ -233,7 +234,7 @@ class functions {
                 e.printStackTrace();
             }
         } else {
-            String sql = " SELECT * FROM aadhar_card WHERE First_Name LIKE \"%" + Fname + "%\" OR Guardian_Name LIKE \"%" + Mname + "%\" OR Last_Name LIKE \"%" + Lname + "%\"";
+              String sql = " SELECT * FROM aadhar_card WHERE First_Name LIKE \"%" + name + "%\" OR Guardian_Name LIKE \"%" + name + "%\" OR Last_Name LIKE \"%" + name + "%\"";
             try {
                 ResultSet rs = stat.executeQuery(sql);
                 while (rs.next()) {
