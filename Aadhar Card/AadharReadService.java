@@ -1,4 +1,4 @@
-package com.brogrammers.java;
+package fileManagement;
 
 import java.io.IOException;
 import java.io.EOFException;
@@ -11,10 +11,11 @@ public class AadharReadService implements ActionListener {
 	StartWindow parentWindow;
 	
     	JFrame frame;
-	JButton button1, button2, button3, backButton;
+	JButton button1, button2, button3, backButton,reset;
 	JTextField[] textFields;
 	JLabel[] labels;
 	JLabel labelFileStatus;
+	JTextArea textArea;
 	
 	AadharFile file;
 	
@@ -37,7 +38,9 @@ public class AadharReadService implements ActionListener {
 		button2 = new JButton("Search by Middle Name");
 		button3 = new JButton("Search by Last Name");
 		backButton = new JButton("Cancel");
-		textFields = new JTextField[4];
+		reset = new JButton("Reset");
+		textFields = new JTextField[3];
+		textArea = new JTextArea();
 		labels = new JLabel[4];
 		labelFileStatus = new JLabel();
 
@@ -66,6 +69,9 @@ public class AadharReadService implements ActionListener {
 		button3.setBounds(150, 350, 200, 30);
 		button3.addActionListener(this);
 		
+		reset.setBounds(150,450,200,30);
+		reset.addActionListener(this);
+		
 		backButton.setBounds(450, 500, 100, 30);
 		backButton.addActionListener(this);
 		
@@ -75,9 +81,8 @@ public class AadharReadService implements ActionListener {
 			frame.add(textFields[i]);
 		}
 		
-		textFields[3] = new JTextField();
-		textFields[3].setBounds(500, 150, 250, 300);
-		frame.add(textFields[3]);
+		textArea.setBounds(500, 150, 250, 300);
+		frame.add(textArea);
 		
 		textFields[0].addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent ke) {
@@ -100,11 +105,6 @@ public class AadharReadService implements ActionListener {
 			}
 		});
 		
-		textFields[3].addKeyListener(new KeyAdapter() {
-			public void keyTyped(KeyEvent ke) {
-				ke.consume();
-			}
-		});
 		
 		for(int i=0; i<3; i++) {
 			labels[i] = new JLabel();
@@ -119,7 +119,7 @@ public class AadharReadService implements ActionListener {
 		labels[0].setText("Aadhar ID");
 		labels[1].setText("Middle Name");
 		labels[2].setText("Last Name");
-		labels[3].setText("Records Found");
+		labels[3].setText("Records");
 		
 		labelFileStatus.setBounds(50, 50, 400, 30);
 		
@@ -127,6 +127,7 @@ public class AadharReadService implements ActionListener {
 		frame.add(button2);
 		frame.add(button3);
 		frame.add(backButton);
+		frame.add(reset);
 		frame.add(labelFileStatus);
 		frame.add(testIndexButton);
 		
@@ -144,35 +145,43 @@ public class AadharReadService implements ActionListener {
 					setStatus("Invalid ID");
 					return;
 				}
-			
 				AadharRecord record  = file.readRecord(Long.parseLong(textFields[0].getText()));
+				if(record.getAadharId() != 0) {	
+					textArea.setText(record.getFirstName() + " " + record.getMiddleName() + " " + record.getLastName());
+				} else {
+					textArea.setText("RECORD NOT FOUND");
+				}
 				
-				textFields[3].setText(record.getFirstName() + " " + record.getMiddleName() + " " + record.getLastName());
-			
 				setStatus("Reading record");
-			} else if(e.getSource() == button3) {
-			    
-			    ArrayList<AadharRecord> recList = file.searchByMiddleName(textFields[2].getText());
-			    String output = "";
-			    for(AadharRecord record : recList) {
-				output = output + "\n" + record.getFirstName() + " " + record.getMiddleName() + " " + record.getLastName();
-			    }
-			    textFields[3].setText(output);
-			    
 			} else if(e.getSource() == button2) {
-			    ArrayList<AadharRecord> recList = file.searchByLastName(textFields[1].getText());
+			    
+			    ArrayList<AadharRecord> recList = file.searchByMiddleName(textFields[1].getText());
 			    String output = "";
 			    for(AadharRecord record : recList) {
 				output = output + "\n" + record.getFirstName() + " " + record.getMiddleName() + " " + record.getLastName();
 			    }
-			    textFields[3].setText(output);
+			    textArea.setText(output);
+			    
+			} else if(e.getSource() == button3) {
+			    ArrayList<AadharRecord> recList = file.searchByLastName(textFields[2].getText());
+			    String output = "";
+			    for(AadharRecord record : recList) {
+				output = output + "\n" + record.getFirstName() + " " + record.getMiddleName() + " " + record.getLastName();
+			    }
+			    textArea.setText(output);
 			    
 			} else if(e.getSource() == backButton) {
 				
 				frame.setVisible(false);
 				this.parentWindow.backToStart();
 			    
+			} else if(e.getSource() == reset){
+				textArea.setText("");
+				textFields[0].setText("");
+				textFields[1].setText("");
+				textFields[2].setText("");
 			}
+			
 		} catch (EOFException eofe) {
 			setStatus("Record does not exist");
                         eofe.printStackTrace();
