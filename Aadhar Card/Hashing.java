@@ -1,4 +1,4 @@
-package com.brogrammers.java;
+package fileManagement;
 
 class Hashing {
 
