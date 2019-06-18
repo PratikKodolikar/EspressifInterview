@@ -1,4 +1,4 @@
-package com.brogrammers.java;
+package fileManagement;
 
 class AadharRecord {
 	
@@ -56,6 +56,7 @@ class AadharRecord {
 		for (String s : str)
 			System.out.println(s);
 		
+		System.out.println("ID = ="+str[0]);
 		this.mAadharId = Long.parseLong(str[0]);
 		this.mFirstName = str[1];
 		this.mMiddleName = str[2];
