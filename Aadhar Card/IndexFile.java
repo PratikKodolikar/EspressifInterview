@@ -1,4 +1,4 @@
-package com.brogrammers.java;
+package fileManagement;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ class IndexFile extends RandomAccessFile {
 			
 	}	
 	
-	public ArrayList searchRecord(String key, AadharFile file) throws IOException {
+	public ArrayList<Integer> searchRecord(String key, AadharFile file) throws IOException {
 		
 		   System.out.println("checking key : " + key);
 	    
